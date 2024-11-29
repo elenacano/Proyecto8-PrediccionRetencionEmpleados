@@ -6,6 +6,7 @@ import numpy as np
 
 import time
 import psutil
+from math import ceil
 
 # Visualizaciones
 # -----------------------------------------------------------------------
@@ -128,10 +129,6 @@ class AnalisisModelosClasificacion:
             self.resultados[modelo_nombre]["pred_test"] = grid_search.best_estimator_.predict(self.X_test)
 
         
-
-
-
-
     def calcular_metricas(self, modelo_nombre):
         """
         Calcula métricas de rendimiento para el modelo seleccionado, incluyendo AUC, Kappa,
@@ -243,9 +240,6 @@ class AnalisisModelosClasificacion:
 
     def curva_roc(self, modelo_nombre):
 
-        if modelo_nombre != "logistic_regression":
-            raise ValueError(f"Modelo '{modelo_nombre}' no reconocido.")
-        
         modelo = self.resultados[modelo_nombre]["mejor_modelo"]
         if modelo is None:
             raise ValueError(f"Debe ajustar el modelo '{modelo_nombre}' antes de calcular importancia de características.")
@@ -292,22 +286,130 @@ class AnalisisModelosClasificacion:
         # Generar el summary plot estándar
         shap.summary_plot(shap_values, self.X_test, feature_names=self.X.columns, plot_size=plot_size)
 
+    def plot_all_matriz_confusion(self):
+        """
+        Plotea la matriz de confusión para el modelo seleccionado.
+        """
+
+        lista_modelos = list(self.resultados.items())
+        num_modelos = len(lista_modelos)
+
+        if num_modelos == 0:
+            print("No hay modelos disponibles para graficar.")
+            return
+        
+        filas = ceil(num_modelos/2)
+        columnas = 2
+
+        fig, axes = plt.subplots(filas, columnas, figsize=(10,4))
+        axes = axes.flat
+
+
+        for i, mod in enumerate(lista_modelos):
+            modelo = mod[0]
+            valores_modelo = mod[1]
+            pred_test = valores_modelo["pred_test"]
+
+            if pred_test is None:
+                pass
+
+            # Matriz de confusión
+            matriz_conf = confusion_matrix(self.y_test, pred_test)
+            sns.heatmap(matriz_conf, annot=True, fmt='g', cmap='Blues', ax=axes[i])
+            axes[i].set_title(f"Matriz de Confusión ({modelo})")
+            axes[i].set_xlabel("Predicción")
+            axes[i].set_ylabel("Valor Real")
+
+        for j in range(i + 1, len(axes)):
+            fig.delaxes(axes[j])
+
+        plt.tight_layout()
+        plt.show()
+
+
+    def curva_roc(self, modelo_nombre):
+
+        modelo = self.resultados[modelo_nombre]["mejor_modelo"]
+        if modelo is None:
+            raise ValueError(f"Debe ajustar el modelo '{modelo_nombre}' antes de calcular importancia de características.")
+        
+        y_pred_test_prob = modelo.predict_proba(self.X_test)[:, 1]
+        fpr, tpr, thresholds = roc_curve(self.y_test, y_pred_test_prob)
+        plt.figure(figsize=(7,5))
+        sns.lineplot(x=[0,1], y=[0,1], color="grey")
+        sns.lineplot(x=fpr, y=tpr, color="blue")
+        plt.xlabel("Ratios Falsos Positivos : 1-Especificidad")
+        plt.ylabel("Ratios Verdaderos Positivos : Recall")
+        plt.title("Curva ROC")
+
+
+    def plot_curvas_roc_train_test(self):
+        """
+        Plotea las curvas ROC para todos los modelos en los datos de entrenamiento y prueba en subplots.
+        """
+
+        lista_modelos = list(self.resultados.items())
+        num_modelos = len(lista_modelos)
+
+        if num_modelos == 0:
+            print("No hay modelos disponibles para graficar.")
+            return
+
+        # Crear los subplots
+        fig, axes = plt.subplots(1, 2, figsize=(14, 7))
+
+        for idx, (dataset, X, y, title, ax) in enumerate([
+            ("train", self.X_train, self.y_train, "Curvas ROC (Train)", axes[0]),
+            ("test", self.X_test, self.y_test, "Curvas ROC (Test)", axes[1]),
+        ]):
+            for mod in lista_modelos:
+                modelo = mod[0]
+                valores_modelo = mod[1]
+                mejor_modelo = valores_modelo.get("mejor_modelo", None)
+
+                if mejor_modelo is None:
+                    print(f"Modelo {modelo} no tiene un modelo ajustado para {dataset}.")
+                    continue
+
+                # Predicciones de probabilidad
+                y_pred_prob = mejor_modelo.predict_proba(X)[:, 1]
+                fpr, tpr, _ = roc_curve(y, y_pred_prob)
+
+                # Graficar la curva ROC
+                sns.lineplot(x=fpr, y=tpr, label=f"{modelo}", ax=ax)
+
+            # Línea diagonal base
+            sns.lineplot(x=[0, 1], y=[0, 1], color="grey", linestyle="--", label="Referencia (AUC: 0.50)", ax=ax)
+
+            # Configuración del subplot
+            ax.set_title(title)
+            ax.legend(loc="lower right")
+            ax.grid(True)
+
+        # Ajustar diseño general
+        plt.tight_layout()
+        plt.show()
 
 # Función para asignar colores
-def color_filas_por_modelo(row):
-    if row["modelo"] == "decision tree":
-        return ["background-color: #e6b3e0; color: black"] * len(row)  
-    
-    elif row["modelo"] == "random_forest":
-        return ["background-color: #c2f0c2; color: black"] * len(row) 
+def color_filas_con_borde(row):
+    styles = []
 
-    elif row["modelo"] == "gradient_boosting":
-        return ["background-color: #ffd9b3; color: black"] * len(row)  
+    for col in row.index:
+        # Condición para pintar la celda de 'auc' en rojo si el valor es menor a 0.6
+        if col == "kappa" and row["kappa"] < 0.6:
+            styles.append("background-color: #ff9999; color: black; border-bottom: 1px solid #000000;")  # Rojo con borde fino
+        elif row["modelo"] == "decision tree":
+            styles.append("background-color: #e6b3e0; color: black; border-bottom: 1px solid #000000;")
+        elif row["modelo"] == "random forest":
+            styles.append("background-color: #c2f0c2; color: black; border-bottom: 1px solid #000000;")
+        elif row["modelo"] == "gradient boosting":
+            styles.append("background-color: #ffd9b3; color: black; border-bottom: 1px solid #000000;")
+        elif row["modelo"] == "xgboost":
+            styles.append("background-color: #f7b3c2; color: black; border-bottom: 1px solid #000000;")
+        elif row["modelo"] == "regresion logistica":
+            styles.append("background-color: #b3d1ff; color: black; border-bottom: 1px solid #000000;")
+        else:
+            styles.append("color: black; border-bottom: 1px solid #000000;")  # Texto negro con borde fino
 
-    elif row["modelo"] == "xgboost":
-        return ["background-color: #f7b3c2; color: black"] * len(row)  
+    return styles
 
-    elif row["modelo"] == "regresion lineal":
-        return ["background-color: #b3d1ff; color: black"] * len(row)  
-    
-    return ["color: black"] * len(row)
