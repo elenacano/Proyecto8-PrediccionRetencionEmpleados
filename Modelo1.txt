@@ -1,0 +1,24 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 1 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+-------------------------EDA-------------------------
+1- Hemos hecho un merge de los 3 dataframes
+
+2- Conversión de columnas numéricas a categóricas:
+    "EnvironmentSatisfaction", "JobSatisfaction", "WorkLifeBalance",
+    "Education", "JobLevel", "StockOptionLevel",
+    "JobInvolvement", "PerformanceRating", "TrainingTimesLastYear"
+
+3- ⚠️Hemos eliminado los nulos ya que eran menos de un 3%
+
+
+-------------------------Encoding-------------------------
+1- Devuelvo a numéricas: ['Education', 'JobLevel', 'StockOptionLevel', 'PerformanceRating']
+2-  ⚠️"onehot":["Gender"]
+    ⚠️"target":['EnvironmentSatisfaction', 'JobSatisfaction', 'WorkLifeBalance', 'BusinessTravel', 'Department', 'EducationField', 'JobRole', 'MaritalStatus', 'TrainingTimesLastYear', 'JobInvolvement']
+
+-------------------------Outliers-------------------------
+1- ⚠️Detectados con IFO
+2- ⚠️Eliminamos los que cumplen que son outliers en al menos el 60%
+
+-------------------------Estandarizacion-------------------------
+1- ⚠️Sin estandarizar
