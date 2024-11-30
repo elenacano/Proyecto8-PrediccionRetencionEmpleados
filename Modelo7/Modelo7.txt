@@ -1,0 +1,21 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 7 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Marcamos con un emoji os cambios hechos respecto al modelo 4. 
+
+-------------------------EDA-------------------------
+- Al eliminar el EmploeeID volvemos a ver los duplicados y los eliminamos.
+- Hemos eliminado los nulos de las numéricas que eran el 1.78% y las categoricas las hemos imputado por "sin informacion"
+
+-------------------------Encoding-------------------------
+1- Devuelvo a numéricas: ['Education', 'JobLevel', 'StockOptionLevel', 'PerformanceRating', "TrainingTimesLastYear", "JobInvolvement"]
+2-  "onehot":["Gender", 'JobRole']
+    "target":['EnvironmentSatisfaction', 'JobSatisfaction', 'WorkLifeBalance', 'BusinessTravel', 'Department', 'EducationField',  'MaritalStatus']
+
+-------------------------Outliers-------------------------
+- ✅Sin gestión de outliers
+
+-------------------------Estandarizacion-------------------------
+1- Estandarizado con robust scaler
+
+-------------------------Balanceo-------------------------
+1- Con Balanceo del 62-37
