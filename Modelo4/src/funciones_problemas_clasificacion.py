@@ -227,7 +227,7 @@ class AnalisisModelosClasificacion:
             "Importance": importancia
         }).sort_values(by="Importance", ascending=False)
 
-        plt.figure(figsize=(8, 4))
+        plt.figure(figsize=(8, 7))
         sns.barplot(x="Importance", y="Feature", data=importancia_df, palette="viridis")
         plt.title(f"Importancia de Características ({modelo_nombre})")
         plt.xlabel("Importancia")
