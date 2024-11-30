@@ -1,4 +1,4 @@
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 5 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Marcamos con un emoji os cambios hechos respecto al modelo anterior. 
 
@@ -16,7 +16,7 @@ Marcamos con un emoji os cambios hechos respecto al modelo anterior.
 2- Eliminamos los que cumplen que son outliers en al menos el 70% que es un 1.62%
 
 -------------------------Estandarizacion-------------------------
-1- Sin estandarizar
+1- Estandarizado con robust scaler
 
 -------------------------Balanceo-------------------------
-1- ✅Con Balanceo del 62-37
+1- ✅Con Balanceo del 58-42

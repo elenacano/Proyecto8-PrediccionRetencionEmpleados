@@ -1,6 +1,6 @@
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< MODELO 6 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-Marcamos con un emoji os cambios hechos respecto al modelo anterior. 
+Marcamos con un emoji os cambios hechos respecto al modelo 4 que es en el cual está basado. 
 
 -------------------------EDA-------------------------
 - Al eliminar el EmploeeID volvemos a ver los duplicados y los eliminamos.
@@ -16,7 +16,7 @@ Marcamos con un emoji os cambios hechos respecto al modelo anterior.
 2- Eliminamos los que cumplen que son outliers en al menos el 70% que es un 1.62%
 
 -------------------------Estandarizacion-------------------------
-1- Sin estandarizar
+1- ✅Estandarizado con minmax scaler
 
 -------------------------Balanceo-------------------------
-1- ✅Con Balanceo del 62-37
+1- Con Balanceo del 62-37
