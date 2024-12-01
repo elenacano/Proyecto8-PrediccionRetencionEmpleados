@@ -134,7 +134,7 @@ Para visualizar el proyecto en tu máquina local, sigue estos pasos:
    ```bash
    python main.py
    ```
-   Abre el navegador e introduce la siguiente URL http://127.0.0.1:5000, introduce los datos deseados y pula "Enviar", a continuación aparecerá la predicción para los datos proporcionados.
+   Abre el navegador e introduce la siguiente URL http://127.0.0.1:5000, introduce los datos deseados y pulsa "Enviar", a continuación aparecerá la predicción para los datos proporcionados.
 
    ![Descripción de la imagen](imagenes/api.png)
 
