@@ -1,90 +1,101 @@
 # Predicción de Retención de Empleados 🏢
 
-![Descripción de la imagen](imagenes/img1.jpeg)
+![Descripción de la imagen](imagenes/portada.jpg)
 
-Este proyecto está diseñado para recopilar, almacenar, analizar y visualizar datos de precios de productos en diferentes supermercados de España a partir de la web de FACUA. Una vez obtenidos los datos y almacenados en una base de datos se procederá al análisis de los mismos. Se busca comparar precios, observar que productos presentan mayores aumentos o caidas de precios, qué días suelen presentarse estas caídas y aumentos, cuáles son los productos más baratos en cada supermercado y otras consultas más de interés.
+En este proyecto nos ponemos en la piel de Recursos Humanos y nos enfrentamos a uno de los mayores dolores de cabeza de cualquier empresa: la rotación de empleados. ¿Por qué algunas personas deciden quedarse mientras otras se van? ¿Será el salario? ¿Las horas extra? ¿La relación con su jefe?
 
+## Introducción
+La rotación de empleados es un desafío crítico para cualquier organización. A través de este proyecto, se busca predecir si un empleado permanecerá en la empresa o no, analizando factores como satisfacción laboral, desempeño y características demográficas.
+
+El objetivo principal es construir un modelo predictivo de machine learning que, además de ofrecer una buena precisión, permita entender los factores que más influyen en la retención y rotación de empleados.
+
+La variable respuesta en el proyecto corresponde a `Attrition` la cual indica con un 1 si un empleado abandona la empresa y un 0 el caso contrario. Es dicha variable la que trataremos de predecir.
 
 ## Estructura del Proyecto
 
-Este proyecto consta de cuatro etapas, cada una en un cuaderno de Jupyter que documenta su implementación:
+Para el desarrollo del proyecto se han llevado a cabo 8 modelos distintos, para mayor información sobre cada modelo como: en qué modelo se basa y diferencia respecto al resto o sus mésticas consultar el pdf `MetricasModelos`.
+Dentro de cada modelo podemos encontrar tres carpetas:
 
-1. **Scraping de Datos `(1-scrapeo.ipynb)`**: 
+1. **datos**
 
-    - Extracción de datos de precios y productos desde la web de FACUA usando Selenium y Beautiful Soup.
-    
-    - Generación de archivos CSV estructurados que almacenan temporalmente los datos extraídos para su posterior procesamiento. Estos archivos se pueden encontrar dentro de la carpeta `datos`.
+    Donde encontramos los csv originales de los datos y otras dos carpetas:
+    - `dataframes`:  donde se almacenan los diferentes dataframes generados en cada fase del modelo.
+    - `preprocesamiento`: donde almacenamos el encoder o scaler utilizados n dicho modelo
 
-2. **Creación y Limpieza de Datos `(2-creacion_limpieza_df.ipynb)`**
-    - Creación y limpieza de los DataFrames que contienen los precios de productos, eliminando duplicados, gestionando valores nulos y formateando los datos para facilitar su almacenamiento y análisis.
+2. **src**
 
-3. **Preparación de Tablas `(3-preparacion_tablas.ipynb)`**
+    Podemos encontrar todos los archivos .py con las fuciones de soporte para cadapartedel modelo.
 
-    - Preparación de las tablas que serán insertadas en la base de datos, reestructuración y creación de las columnas necesarias para la inserción directa.
+3. **notebooks**
 
-4. **Creación e inserciones en la base de datos + análisis `(4-consultas_bbdd.ipynb)`** 
+    Donde se encuentran las distintas fases de la creación del modelo.
+    - `1-EDA-nulos.ipynb`
+    - `2-encoding.ipynb`
+    - `3-outliers.ipynb`
+    - `4-estandarizacion.ipynb`
+    - `5-balanceo.ipynb`, aunque hay algunos modelos que no cuentan con este notebook.
+    - `6-modelos.ipynb`, en este notebook se pueden encontrar las métricas obtenidas para dicho modelo.
 
-    - Diseño de la base de datos en PostgreSQL para almacenar de manera eficiente la información recolectada.
+4. **Modelo_.txt**
 
-    - Creación de tablas SQL que permiten estructurar la información en categorías clave: supermercados, tipo_productos, marcas y comparativas.
-
-    - Análisis exploratorio y consultas SQL para extraer subconjuntos de datos de interés.
-
-    - Generación de visualizaciones con Pandas y Matplotlib para comparar precios, estudiar su evolución temporal y detectar patrones y tendencias de precios.
+    Cada modelo tiene un txt explicando más en profundidad como se han tratado los datos y las diferencias que hay respecto al modelo en el que están basados.
 
 
 ## Resumen del proyecto
 
-- **Scraping de Datos**:
+Tras probar varios modelos podemos concluir que lasmejors métricas obtenidas son las del `Modelo4`. Para este modelo el preprocesamiento de los datos fue el siguiente:
 
-    -   Extracción detallada de productos y precios de la web FACUA.
-    -   Recopilación de datos para múltiples supermercados (Alcampo, Carrefour, Dia, Eroski, Hipercor y Mercadona).
+- **EDA**
+    - Tras eliminar el EmploeeID eliminamos los duplicados.
+    - Gestión de nulos: Hemos eliminado los nulos de las numéricas que representaban un 1.78% y los nulos de las categoricas las hemos imputado por "sin informacion".
 
--   **Almacenamiento en Base de Datos**:
+- **Encoding**:
+    - Devuelvo a numéricas: ['Education', 'JobLevel', 'StockOptionLevel', 'PerformanceRating', "TrainingTimesLastYear", "JobInvolvement"]
+    -  "onehot":["Gender", 'JobRole']
+        "target":['EnvironmentSatisfaction', 'JobSatisfaction', 'WorkLifeBalance', 'BusinessTravel', 'Department', 'EducationField',  'MaritalStatus']
 
-    -   Creación de una base de datos relacional en PostgreSQL para almacenar toda la información recolectada.
-    -   Población de la base de datos con los datos obtenidos de los archivos CSV.
+- **Outliers**:
+    - Detección con IFO.
+    - Eliminamos los que cumplen que son outliers en al menos el 70% de los casos, estos representan un 1.62%.
 
--   **Análisis de Datos con Python y SQL**:
+- **Estandarizacion**:
+    - Estandarizado con robust scaler
 
-    -   Comparación de precios entre supermercados.
-    -   Análisis de la evolución de precios en distintos periodos.
-    -   Generación de gráficos que permitan visualizar las diferencias y tendencias de precios
+- **Balanceo**
+    - Obtenemos un balanceo del 62-37 aplicando primero el Tomek link y después el smotenc.
 
+Una vez llevado a cabo todo este preprocesamiento se probaron varios modelos de clasificación como la regresión logística, el descision tree, el random forst, el gradient boosting y el xgboost. Finalmente las métricas obtenidas fueron las siguientes:
+
+![Descripción de la imagen](imagenes/metricas-modelo4.png)
+
+Como podemos observar el modelo que mejor funciona es el gradient boosting con un **accuracy, precisión y recal de 0.9** y una **kappa de 0.8**. Además, la métrica que más queremos priorizar es recall pues nos interesa minimizar los falsos negativos, es decir, queremos el menor número de prediciiones que digan que un empleado no se va de la empresa y finalmente se va. Si observamos las matries de confusión para las distintas métricas el gradiente boosting es la que arroja un menor número de falsos negativos.
+
+![Descripción de la imagen](imagenes/matrices_modelo4.png)
+
+En los distintos modelos se prueban diferentes formas de gestionar los otliers, el encoding, la estandarización o el balanceo, sin embargo, es en este modelo donde mejores métricas se han obtenido.
+
+Una vez hemos concluido que el gradient boosting del Modelo4 es el mejor, almacenamos el modelo y lo entrenamos con todos los datos dentro del notebbok `6-modelos.ipynb` en el Módulo4. Además, encontraremos un notebook adicional que es el `7-prediccion.ipynb` donde nos inventamos unos datos ficticios y comprobamos que se hagan las predicciones correctamente.
+
+Finalmente, para hacer una interfaz más amigable a la hora de hacer las predicciones se ha creado una API con Flask dentro de `src/main.py` la cual renderiza un html a través del cual le podemos meter las distintas métricas para un empleado y predecir con que probabilidad abandona o no la empresa.
 
 ## Conclusiones 
 
-Lo primero que se hizo es obtener por supermercado y tipo de producto un precio promedio para cada tipo de producto. A continuación decisimos observar cuales eran los 10 productos con mayor variación de precio, los cuales eran sin duda alguna las garrafas de aceite de oliva de 5l. Lo que nos llevo a analizar las diferencias de precio de los productos pero para un litro. En cuanto al aceite de oliva la mayor variación era de 6 euros y correpondía  al marca Ferrarini, en cuanto al aceite de girasol la mayor difrencia de precios era de 1.33 de la marca coocol. En cuanto a la leche las direnecias no superaban los 80 céntimos estando en cabeza kaiku.
+Tras obtener nuestro mejor modelo lo que más nos interesa saber es: ¿cuales son los factores que más influyen a la hora de hacer la predicción? ¿Qué valores se toman para cada categoría e las personas que deciden abandonar una empresa?
 
-En cuanto a las marcas se planteo que podría ser interesante ver cuales son las que más incrementos han sufrido, diferenciandolas por tipo de producto. dichas gráficas y conclusiones se pueden consultar en el notebook `4-consultas_bbdd`.
+La primera pregunta la podemos responder viendo la gráfica de la impotancia de los predictores:
 
-Otra de las cuestiones relevantes a la hora de hacer el estudio era observar si había una tendencia en los días que había caidas o aumento en los precios de los productos, obteniendo la siguiente gráfica:
+![Descripción de la imagen](imagenes/feture-importance.png)
 
-![Descripción de la imagen](imagenes/img2.png)
+Como podemos observar los predictores que mayor peso tienen a la hora de genera el modelo son: YearsAtCompany, YearsWithCurrentManager, Age, NumCompaniesWorked y MaritalStatus. Las primeras no nos sorprenden que parezcan juntas pues como se ve en el EDA las dos primeras estan bastante correlacionadas, sin embargo, Maritalstatus si que me llama la atención. Por otro lado lo que menos parece influir es el JobInvolment, el género y el JobRole.
 
-Como podemos observar el día en el cual se ha experimentado mayor subida de precios es el miércoles, seguido de cerca por el jueves y martes. En cuanto los días con más bajadas de precios son los jueves, seguido de martes y miércoles. Por lo tanto, en los mismo días son en los que más subidas y bajadas se registran. Si quisiera asegurarme de que no va a haber muchas subidas pero quizás alguna bajada iría al super un sábado.
+Contestemos a la segunda pregunta, para ello usaremos el gráfico shap:
 
-Finalmente también se hizo un análisis por supermercado de cuales son los productos más baratos por cada tipo de supermercado, cuya tabla se puede consultar en el notebook. Llegando a la conclusión de que en cuanto a los aceites de girasol, los mas baratos suelen ser los de la propia marca de cada supermercado, a excepción del alcampo donde es koipesol, en el eroski coosol y en el hipercor abrisol. Respecto al aceite de oliva suele ser más barato el de orujo, excepto en el hipercor y mercadona donde las marcas más baratas son abril y el hacendado. En cuanto la leche, en alcampo sorprende con dos leches de marca como son president y kaiku a 50 centimos el litro, en el resto predominan las marcas propias de cada supermercado.
+![Descripción de la imagen](imagenes/shap.png)
 
-Para conluir el estudio también se puede consultar una compartiva de precios del día 1 de octubre respecto al día del estudio, el 25 de octubre y se puede observar cuales son los productos que mayor subida y bajada de precio ha experimentado, ¡échenle un ojo!
+Veamos como los valores de cada variable influye y en que nivel para que una persona abandone la compañía. Para entender los valores de MaritalStatus tenemos que volver al notebook 2 y ver a que valores corresponde cada categría, vemos que Single es la más alta y casado y divorciado tienen valores muy similares. Por lo tanto las personas solteras son más propensas a irse de la compañía.
+También podemos ver que aquellos que llevan menos años en la compañía, con su manager y en general menos años trabajando también son más propensos a irse, lo que coincide con las personas más jovenes. También podemos destacar que aquellas que tienen mayor nivel de estudios o las que tienden a viajar más suelen tener un porcentaje más alto para irse de la empresa. 
 
-
-## Organización del Proyecto
-
-El proyecto está organizado de la siguiente manera:
-
-- **datos/**: Carpeta que contiene los archivos `.csv` de los datos extraídos de la web de Facua y las tablas ya limpias y listas para la inserción en la bbdd. Además de un `.json` con un diccionario de los links de cada producto analizado.
-
-- **notebooks/**: Carpeta que contiene los archivos `.ipynb` sobre los cuales hemos trabajado los datos:
-  - `1-scrapeo.ipynb`
-  - `2-creacion_limpieza_df.ipynb`
-  - `3-preparacion_tablas.ipynb`
-  - `4-consultas_bbdd.ipynb`
-    
-    Estos archivos se deben revisar/ejecutar en orden para una completa comprensión del proyecto.
-
-- **src/**: Carpeta que contiene un archivo `.py` en el cual tenemos funciones auxiliares a las cuales hacemos llamdas desde los notebooks.
-  - `funciones_auxiliares.py`
+Por lo tanto, hemos visto cuales son las que más afectan y también dentro de categoría para que valores suele haber más porcentaje de abandono. también hemos podio observar que métricas que en un primer momento no podían parecer decisorias como EnvironmentSatisfaction o Jobsatisfaction resulta que aquellos trabajadores que les dan valores más altos tiene mayor probabilidades de irse. Por lo que estos gráficos aportan una información de gran valor a la empresa a la hora de identificar en qué clase de perfiles incidir más para cambiar esas tendencias de abandono.
 
 
 ## Instalación y Requisitos
@@ -93,10 +104,15 @@ Este proyecto usa Python 3.11 y requiere las siguientes bibliotecas:
 - [pandas](https://pandas.pydata.org/docs/reference/frame.html)
 - [matplotlib.pyplot](https://matplotlib.org/3.5.3/api/_as_gen/matplotlib.pyplot.html)
 - [seaborn](https://seaborn.pydata.org/)
-- [requests](https://requests.readthedocs.io/en/latest/)
-- [BeautifulSoup](https://pypi.org/project/beautifulsoup4/)
-- [Selenium](https://www.selenium.dev/documentation/)
-- [psycopg2](https://pypi.org/project/psycopg2/)
+- [shap](https://shap.readthedocs.io/en/latest/)
+- [flask](https://flask.palletsprojects.com/en/stable/)
+- [scikitlearn](https://scikit-learn.org/stable/)
+- [imblearn](https://imbalanced-learn.org/stable/)
+- [itertools](https://docs.python.org/3/library/itertools.html)
+- [warnings](https://docs.python.org/3/library/warnings.html)
+
+Este proyecto es funcional a fecha 1 de diciembre de 2024.
+
 
 
 Para visualizar el proyecto en tu máquina local, sigue estos pasos:
@@ -109,7 +125,16 @@ Para visualizar el proyecto en tu máquina local, sigue estos pasos:
    
 2. **Navega a la carpeta del proyecto**:
    ```bash
-   cd Proyecto4-AnalisisFacua
+   cd Proyecto8-PrediccionRetencionEmpleados
 
 2. **Ejecutar o visualizar los archivos**:
-   Accede a la carpeta `notebooks` y ejecutar cada archivos en ordén. Además, configura una base de datos PostgreSQL y actualiza las credenciales en los notebooks.
+   Accede a cualquier carpeta de los modelos y dentro ve a la carpeta `notebooks` y ejecuta o visualiza los archivos en el orden especificado.
+
+   Para realizar predicciones accede a `Modulo4/src` y ejecuta:
+   ```bash
+   python main.py
+   ```
+   Abre el navegador e introduce la siguiente URL http://127.0.0.1:5000, introduce los datos deseados y pula "Enviar", a continuación aparecerá la predicción para los datos proporcionados.
+
+   ![Descripción de la imagen](imagenes/api.png)
+
