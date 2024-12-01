@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify # type: ignore
 import numpy as np
-import pandas as pd
+import pandas as pd # type: ignore
 import pickle
 
 app = Flask(__name__)
@@ -38,8 +38,10 @@ def index():
 def predict():
 
     try:
+        print("Dentro")
         data = request.get_json()
         df_pred = pd.DataFrame(data, index=[0])
+        print(data)
 
         # --------------------- Primero hacemos el one hot encoder ----------------------
         encoded_matrix = one_hot_encoder.transform(df_pred[col_one_hot])

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Empleado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            padding: 8px;
+            font-size: 14px;
+        }
+        button {
+        grid-column: span 4;
+        background-color: pink; /* Color de fondo rosa */
+        color: white;
+        width: 500px;
+        border: 2px solid purple; /* Borde morado */
+        border-radius: 12px; /* Bordes redondeados */
+        cursor: pointer;
+        padding: 10px 20px; /* Tamaño y padding */
+        font-size: 16px;
+        text-align: center;
+        display: block;
+        margin: 30px auto 0;
+        transition: background-color 0.3s, border-color 0.3s; /* Transición para el hover */
+    }
+
+    button:hover {
+        background-color: #f06292; /* Rosa más oscuro para el hover */
+        border-color: #8e24aa; /* Borde morado más oscuro para el hover */
+    }
+        #response {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulario de Datos de Empleado</h1>
+    <form id="employeeForm">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="EnvironmentSatisfaction">Environment Satisfaction:</label>
+                <select id="EnvironmentSatisfaction" name="EnvironmentSatisfaction">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                    <option value="4">Very High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="JobSatisfaction">Job Satisfaction:</label>
+                <select id="JobSatisfaction" name="JobSatisfaction">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                    <option value="4">Very High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="WorkLifeBalance">Work-Life Balance:</label>
+                <select id="WorkLifeBalance" name="WorkLifeBalance">
+                    <option value="1">Bad</option>
+                    <option value="2">Good</option>
+                    <option value="3">Better</option>
+                    <option value="4">Best</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Age">Age:</label>
+                <input type="number" id="Age" name="Age" required min="18" max="70">
+                <small id="ageError" style="color: red; display: none;">La edad debe ser un número entero entre 18 y 70.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="BusinessTravel">Business Travel:</label>
+                <select id="BusinessTravel" name="BusinessTravel">
+                    <option value="Travel_Rarely">Travel Rarely</option>
+                    <option value="Travel_Frequently">Travel Frequently</option>
+                    <option value="Non-Travel">Non-Travel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Department">Department:</label>
+                <select id="Department" name="Department">
+                    <option value="Research & Development">Research & Development</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Human Resources">Human Resources</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="DistanceFromHome">Distance from Home (km):</label>
+                <input type="number" id="DistanceFromHome" name="DistanceFromHome" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="Education">Education:</label>
+                <select id="Education" name="Education">
+                    <option value="1">Below College</option>
+                    <option value="2">College</option>
+                    <option value="3">Bachelor</option>
+                    <option value="4">Master</option>
+                    <option value="5">Doctor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="EducationField">Education Field:</label>
+                <select id="EducationField" name="EducationField">
+                    <option value="Technical Degree">Technical Degree</option>
+                    <option value="Life Sciences">Life Sciences</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Gender">Gender:</label>
+                <select id="Gender" name="Gender">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="JobLevel">Job Level:</label>
+                <input type="number" id="JobLevel" name="JobLevel" required min="1" max="5">
+            </div>
+            <div class="form-group">
+                <label for="JobRole">Job Role:</label>
+                <select id="JobRole" name="JobRole">
+                    <option value="Healthcare Representative">Healthcare Representative</option>
+                    <option value="Research Scientist">Research Scientist</option>
+                    <option value="Sales Executive">Sales Executive</option>
+                    <option value="Human Resources">Human Resources</option>
+                    <option value="Research Director">Research Director</option>
+                    <option value="Laboratory Technician">Laboratory Technician</option>
+                    <option value="Manufacturing Director">Manufacturing Director</option>
+                    <option value="Sales Representative">Sales Representative</option>
+                    <option value="Manager">Manager</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="MaritalStatus">Marital Status:</label>
+                <select id="MaritalStatus" name="MaritalStatus">
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Divorced">Divorced</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="MonthlyIncome">Annual Income:</label>
+                <input type="number" id="MonthlyIncome" name="MonthlyIncome" required min="10000">
+            </div>
+            <div class="form-group">
+                <label for="NumCompaniesWorked">Number of Companies Worked:</label>
+                <input type="number" id="NumCompaniesWorked" name="NumCompaniesWorked" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="PercentSalaryHike">Percent Salary Hike:</label>
+                <input type="number" id="PercentSalaryHike" name="PercentSalaryHike" required min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="StockOptionLevel">Stock Option Level:</label>
+                <input type="number" id="StockOptionLevel" name="StockOptionLevel" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="TotalWorkingYears">Total Working Years:</label>
+                <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="TrainingTimesLastYear">Training Times Last Year:</label>
+                <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="YearsAtCompany">Years at Company:</label>
+                <input type="number" id="YearsAtCompany" name="YearsAtCompany" required min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="YearsSinceLastPromotion">Years Since Last Promotion:</label>
+                <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="YearsWithCurrManager">Years with Current Manager:</label>
+                <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" required min="0">
+            </div>
+            <div class="form-group">
+                <label for="JobInvolvement">Job Involvement:</label>
+                <select id="JobInvolvement" name="JobInvolvement">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                    <option value="4">Very High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="PerformanceRating">Performance Rating:</label>
+                <select id="PerformanceRating" name="PerformanceRating">
+                    <option value="1">Low</option>
+                    <option value="2">Good</option>
+                    <option value="3">Excellent</option>
+                    <option value="4">Outstanding</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="button" onclick="sendEmployeeData()">Enviar</button>
+    </form>
+
+    <pre id="response"></pre>
+
+    <script>
+        
+        // -----------------------Comprobar que la edad es correcta--------------------
+        const ageInput = document.getElementById('Age');
+        const ageError = document.getElementById('ageError');
+
+        ageInput.addEventListener('input', () => {
+            const age = ageInput.value;
+
+            // Validar si es un número entero y está dentro del rango permitido
+            if (!Number.isInteger(parseFloat(age)) || age < 18 || age > 70) {
+                ageError.style.display = 'block';
+            } else {
+                ageError.style.display = 'none';
+            }
+        });
+
+        // -----------------------Envio de informacion--------------------
+        function sendEmployeeData() {
+            const form = document.getElementById('employeeForm');
+            const formData = new FormData(form);
+
+            const data = Object.fromEntries(formData.entries());
+
+
+            // ------ Verificar si hay campos vacíos ----
+            let hasEmptyFields = false;
+            const emptyFields = [];
+
+            formData.forEach((value, key) => {
+                if (!value.trim()) {
+                    hasEmptyFields = true;
+                    emptyFields.push(key);
+                }
+            });
+
+            if (hasEmptyFields) {
+                alert(`Por favor, completa todos los campos obligatorios:\n${emptyFields.join(', ')}`);
+                return;
+            }
+
+
+
+            data.EnvironmentSatisfaction = parseInt(data.EnvironmentSatisfaction);
+            data.JobSatisfaction = parseInt(data.JobSatisfaction);
+            data.WorkLifeBalance = parseInt(data.WorkLifeBalance);
+            data.Education = parseInt(data.Education);
+            data.PerformanceRating = parseInt(data.PerformanceRating);
+            data.JobInvolvement = parseInt(data.JobInvolvement);
+
+            for (const key in data) {
+                if (!isNaN(data[key])) {
+                    data[key] = parseFloat(data[key]); // Convertir valores numéricos
+                }
+            }
+
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('response').textContent = 'Error al enviar la solicitud.';
+            });
+        }
+    </script>
+</body>
+</html>
