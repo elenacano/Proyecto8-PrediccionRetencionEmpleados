@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Empleado</title>
+    <style>
+        /* Fuente global */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #3B4C56, #9AA9A1); /* Colores más suaves y corporativos */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #333;
+        }
+
+        /* Título */
+        h1 {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 36px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Contenedor del formulario */
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            border: 1px solid #e2e2e2;
+        }
+
+        /* Formulario */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Cambiar a 4 columnas */
+            gap: 20px; /* Espacio entre columnas */
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            margin-top: 30px;
+        }
+
+        button:hover {
+            background-color: #004080;
+        }
+
+        /* Mensaje de respuesta */
+        #response {
+            display: none;
+            width: 95%;
+            padding: 10px;
+            font-size: 24px;
+            border-radius: 2px;
+            margin-top: 20px;
+            text-align: center;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        #response.success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        #response.error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Espaciado pequeño para errores */
+        small {
+            color: #e74c3c;
+            font-size: 12px;
+            display: none;
+        }
+
+        /* Contenedor del botón */
+        .form-container .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Responsividad */
+        @media (max-width: 1024px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr; /* 2 columnas en pantallas medianas */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Formulario de Datos de Empleado</h1>
+    <div class="form-container">
+        <form id="employeeForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="EnvironmentSatisfaction">Environment Satisfaction:</label>
+                    <select id="EnvironmentSatisfaction" name="EnvironmentSatisfaction">
+                        <option value="1">Low</option>
+                        <option value="2">Medium</option>
+                        <option value="3">High</option>
+                        <option value="4">Very High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="JobSatisfaction">Job Satisfaction:</label>
+                    <select id="JobSatisfaction" name="JobSatisfaction">
+                        <option value="1">Low</option>
+                        <option value="2">Medium</option>
+                        <option value="3">High</option>
+                        <option value="4">Very High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="WorkLifeBalance">Work-Life Balance:</label>
+                    <select id="WorkLifeBalance" name="WorkLifeBalance">
+                        <option value="1">Bad</option>
+                        <option value="2">Good</option>
+                        <option value="3">Better</option>
+                        <option value="4">Best</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Age">Age:</label>
+                    <input type="number" id="Age" name="Age" required min="18" max="70" value="30">
+                    <small id="ageError">La edad debe ser un número entero entre 18 y 70.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="BusinessTravel">Business Travel:</label>
+                    <select id="BusinessTravel" name="BusinessTravel">
+                        <option value="Travel_Rarely">Travel Rarely</option>
+                        <option value="Travel_Frequently">Travel Frequently</option>
+                        <option value="Non-Travel">Non-Travel</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Department">Department:</label>
+                    <select id="Department" name="Department">
+                        <option value="Research & Development">Research & Development</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Human Resources">Human Resources</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="DistanceFromHome">Distance from Home (km):</label>
+                    <input type="number" id="DistanceFromHome" name="DistanceFromHome" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="Education">Education:</label>
+                    <select id="Education" name="Education">
+                        <option value="1">Below College</option>
+                        <option value="2">College</option>
+                        <option value="3">Bachelor</option>
+                        <option value="4">Master</option>
+                        <option value="5">Doctor</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="EducationField">Education Field:</label>
+                    <select id="EducationField" name="EducationField">
+                        <option value="Technical Degree">Technical Degree</option>
+                        <option value="Life Sciences">Life Sciences</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Gender">Gender:</label>
+                    <select id="Gender" name="Gender">
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="JobLevel">Job Level:</label>
+                    <input type="number" id="JobLevel" name="JobLevel" required min="1" max="5" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="JobRole">Job Role:</label>
+                    <select id="JobRole" name="JobRole">
+                        <option value="Healthcare Representative">Healthcare Representative</option>
+                        <option value="Research Scientist">Research Scientist</option>
+                        <option value="Sales Executive">Sales Executive</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Research Director">Research Director</option>
+                        <option value="Laboratory Technician">Laboratory Technician</option>
+                        <option value="Manufacturing Director">Manufacturing Director</option>
+                        <option value="Sales Representative">Sales Representative</option>
+                        <option value="Manager">Manager</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="MaritalStatus">Marital Status:</label>
+                    <select id="MaritalStatus" name="MaritalStatus">
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="MonthlyIncome">Annual Income:</label>
+                    <input type="number" id="MonthlyIncome" name="MonthlyIncome" required min="10000" value="10000">
+                </div>
+                <div class="form-group">
+                    <label for="NumCompaniesWorked">Number of Companies Worked:</label>
+                    <input type="number" id="NumCompaniesWorked" name="NumCompaniesWorked" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="PercentSalaryHike">Percent Salary Hike:</label>
+                    <input type="number" id="PercentSalaryHike" name="PercentSalaryHike" required min="0" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="StockOptionLevel">Stock Option Level:</label>
+                    <input type="number" id="StockOptionLevel" name="StockOptionLevel" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="TotalWorkingYears">Total Working Years:</label>
+                    <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="TrainingTimesLastYear">Training Times Last Year:</label>
+                    <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="YearsAtCompany">Years at Company:</label>
+                    <input type="number" id="YearsAtCompany" name="YearsAtCompany" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="YearsSinceLastPromotion">Years Since Last Promotion:</label>
+                    <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="YearsWithCurrManager">Years with Current Manager:</label>
+                    <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" required min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="JobInvolvement">Job Involvement:</label>
+                    <select id="JobInvolvement" name="JobInvolvement">
+                        <option value="1">Low</option>
+                        <option value="2">Medium</option>
+                        <option value="3">High</option>
+                        <option value="4">Very High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="PerformanceRating">Performance Rating:</label>
+                    <select id="PerformanceRating" name="PerformanceRating">
+                        <option value="1">Low</option>
+                        <option value="2">Good</option>
+                        <option value="3">Excellent</option>
+                        <option value="4">Outstanding</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="sendEmployeeData()">Enviar</button>
+            </div>
+        </form>
+
+        <pre id="response"></pre>
+    </div>
+
+    <script>
+        // -----------------------Comprobar que la edad es correcta--------------------
+        const ageInput = document.getElementById('Age');
+        const ageError = document.getElementById('ageError');
+
+        ageInput.addEventListener('input', () => {
+            const age = ageInput.value;
+
+            // Validar si es un número entero y está dentro del rango permitido
+            if (!Number.isInteger(parseFloat(age)) || age < 18 || age > 70) {
+                ageError.style.display = 'block';
+            } else {
+                ageError.style.display = 'none';
+            }
+        });
+
+        // -----------------------Envio de informacion--------------------
+        function sendEmployeeData() {
+            const form = document.getElementById('employeeForm');
+            const formData = new FormData(form);
+
+            const data = Object.fromEntries(formData.entries());
+
+            // ------ Verificar si hay campos vacíos ----
+            let hasEmptyFields = false;
+            const emptyFields = [];
+
+            formData.forEach((value, key) => {
+                if (!value.trim()) {
+                    hasEmptyFields = true;
+                    emptyFields.push(key);
+                }
+            });
+
+            if (hasEmptyFields) {
+                alert(`Por favor, completa todos los campos obligatorios:\n\n${emptyFields.join(', ')}`);
+                return;
+            }
+
+            
+
+            data.EnvironmentSatisfaction = parseInt(data.EnvironmentSatisfaction);
+            data.JobSatisfaction = parseInt(data.JobSatisfaction);
+            data.WorkLifeBalance = parseInt(data.WorkLifeBalance);
+            data.Education = parseInt(data.Education);
+            data.PerformanceRating = parseInt(data.PerformanceRating);
+            data.JobInvolvement = parseInt(data.JobInvolvement);
+
+            for (const key in data) {
+                if (!isNaN(data[key])) {
+                    data[key] = parseFloat(data[key]); // Convertir valores numéricos
+                }
+            }
+
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const responseElement = document.getElementById('response');
+                responseElement.style.display = 'block'; // Mostrar respuesta
+                
+                const mensaje = `El empleado ${result.prediccion} se va de la empresa con una probabilidad del ${result.probabilidad.toFixed(2)}%`;
+                responseElement.textContent = mensaje;
+
+            })
+            .catch(error => {
+                responseElement.style.display = 'block'; // Mostrar respuesta de error
+                responseElement.textContent = 'Error al enviar la solicitud.';
+            });
+        }
+    </script>
+
+
+</body>
+</html>

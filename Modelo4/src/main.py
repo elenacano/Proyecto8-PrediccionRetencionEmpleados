@@ -31,7 +31,7 @@ col_target = diccionario_encoding["target"]
 
 @app.route("/")
 def index():
-    return app.send_static_file('index.html')
+    return app.send_static_file('index2.html')
 
 
 @app.route("/predict", methods=["POST"])
