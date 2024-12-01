@@ -76,8 +76,30 @@
         }
 
         #response {
-            margin-top: 20px;
+            display: none; /* Asegura que no sea visible inicialmente */
+            width: 95%; /* Ocupa el 100% del ancho del contenedor */
+            max-width: 1000px; /* Limita el ancho máximo para que no se estire demasiado */
+            background-color: #E6E6C9; /* Un color de fondo suave */
+            padding: 20px; /* Espaciado interno */
+            text-align: center; /* Centra el texto */
+            font-size: 18px; /* Tamaño de fuente grande */
+            font-weight: bold; /* Letra en negrita */
+            border-radius: 8px; /* Bordes redondeados */
+            margin-top: 20px; /* Margen superior para separar del formulario */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
         }
+
+        #response.success {
+            background-color: #C4C6B0;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        #response.error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+}
 
         small {
             color: red;
@@ -128,7 +150,7 @@
                 </div>
                 <div class="form-group">
                     <label for="Age">Age:</label>
-                    <input type="number" id="Age" name="Age" required min="18" max="70">
+                    <input type="number" id="Age" name="Age" required min="18" max="70" value="30">
                     <small id="ageError">La edad debe ser un número entero entre 18 y 70.</small>
                 </div>
 
@@ -150,7 +172,7 @@
                 </div>
                 <div class="form-group">
                     <label for="DistanceFromHome">Distance from Home (km):</label>
-                    <input type="number" id="DistanceFromHome" name="DistanceFromHome" required min="0">
+                    <input type="number" id="DistanceFromHome" name="DistanceFromHome" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="Education">Education:</label>
@@ -183,7 +205,7 @@
                 </div>
                 <div class="form-group">
                     <label for="JobLevel">Job Level:</label>
-                    <input type="number" id="JobLevel" name="JobLevel" required min="1" max="5">
+                    <input type="number" id="JobLevel" name="JobLevel" required min="1" max="5" value="1">
                 </div>
                 <div class="form-group">
                     <label for="JobRole">Job Role:</label>
@@ -210,40 +232,40 @@
                 </div>
                 <div class="form-group">
                     <label for="MonthlyIncome">Annual Income:</label>
-                    <input type="number" id="MonthlyIncome" name="MonthlyIncome" required min="10000">
+                    <input type="number" id="MonthlyIncome" name="MonthlyIncome" required min="10000" value="10000">
                 </div>
                 <div class="form-group">
                     <label for="NumCompaniesWorked">Number of Companies Worked:</label>
-                    <input type="number" id="NumCompaniesWorked" name="NumCompaniesWorked" required min="0">
+                    <input type="number" id="NumCompaniesWorked" name="NumCompaniesWorked" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="PercentSalaryHike">Percent Salary Hike:</label>
-                    <input type="number" id="PercentSalaryHike" name="PercentSalaryHike" required min="0">
+                    <input type="number" id="PercentSalaryHike" name="PercentSalaryHike" required min="0" value="0">
                 </div>
 
                 <div class="form-group">
                     <label for="StockOptionLevel">Stock Option Level:</label>
-                    <input type="number" id="StockOptionLevel" name="StockOptionLevel" required min="0">
+                    <input type="number" id="StockOptionLevel" name="StockOptionLevel" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="TotalWorkingYears">Total Working Years:</label>
-                    <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" required min="0">
+                    <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="TrainingTimesLastYear">Training Times Last Year:</label>
-                    <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" required min="0">
+                    <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="YearsAtCompany">Years at Company:</label>
-                    <input type="number" id="YearsAtCompany" name="YearsAtCompany" required min="0">
+                    <input type="number" id="YearsAtCompany" name="YearsAtCompany" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="YearsSinceLastPromotion">Years Since Last Promotion:</label>
-                    <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" required min="0">
+                    <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="YearsWithCurrManager">Years with Current Manager:</label>
-                    <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" required min="0">
+                    <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" required min="0" value="0">
                 </div>
                 <div class="form-group">
                     <label for="JobInvolvement">Job Involvement:</label>
@@ -335,11 +357,20 @@
             })
             .then(response => response.json())
             .then(result => {
-                document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+                const responseElement = document.getElementById('response');
+                responseElement.style.display = 'block'; // Mostrar respuesta
+                
+                const mensaje = `El empleado ${result.prediccion} se va de la empresa con una probabilidad del ${result.probabilidad.toFixed(2)}%`;
+                responseElement.textContent = mensaje;
+
+                // Opcional: Puedes cambiar el color o la clase según el resultado
+                responseElement.classList.remove('error');
+                responseElement.classList.add('success');
             })
             .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('response').textContent = 'Error al enviar la solicitud.';
+                responseElement.style.display = 'block'; // Mostrar respuesta de error
+                responseElement.classList.add('error'); // Añadir clase de error
+                responseElement.textContent = 'Error al enviar la solicitud.';
             });
         }
     </script>
