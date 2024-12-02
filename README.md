@@ -13,18 +13,18 @@ La variable respuesta en el proyecto corresponde a `Attrition` la cual indica co
 
 ## Estructura del Proyecto
 
-Para el desarrollo del proyecto se han llevado a cabo 8 modelos distintos, para mayor información sobre cada modelo como: en qué modelo se basa y diferencia respecto al resto o sus mésticas consultar el pdf `MetricasModelos`.
+Para el desarrollo del proyecto se han llevado a cabo 8 modelos distintos, para mayor información sobre cada modelo como: en qué modelo se basa y diferencia respecto al resto o sus mésticas, consultar el pdf `MetricasModelos`.
 Dentro de cada modelo podemos encontrar tres carpetas:
 
 1. **datos**
 
-    Donde encontramos los csv originales de los datos y otras dos carpetas:
+    Donde encontramos los `.csv` originales de los datos y otras dos carpetas:
     - `dataframes`:  donde se almacenan los diferentes dataframes generados en cada fase del modelo.
-    - `preprocesamiento`: donde almacenamos el encoder o scaler utilizados n dicho modelo
+    - `preprocesamiento`: donde almacenamos el encoder o scaler utilizados en dicho modelo.
 
 2. **src**
 
-    Podemos encontrar todos los archivos .py con las fuciones de soporte para cadapartedel modelo.
+    Podemos encontrar todos los archivos .py con las fuciones de soporte para cada parte del modelo.
 
 3. **notebooks**
 
@@ -38,12 +38,12 @@ Dentro de cada modelo podemos encontrar tres carpetas:
 
 4. **Modelo_.txt**
 
-    Cada modelo tiene un txt explicando más en profundidad como se han tratado los datos y las diferencias que hay respecto al modelo en el que están basados.
+    Cada modelo tiene un .txt explicando más en profundidad como se han tratado los datos y las diferencias que hay respecto al modelo en el que están basados.
 
 
 ## Resumen del proyecto
 
-Tras probar varios modelos podemos concluir que lasmejors métricas obtenidas son las del `Modelo4`. Para este modelo el preprocesamiento de los datos fue el siguiente:
+Tras probar varios modelos podemos concluir que las mejores métricas obtenidas son las del `Modelo4`. Para este modelo el preprocesamiento de los datos fue el siguiente:
 
 - **EDA**
     - Tras eliminar el EmploeeID eliminamos los duplicados.
@@ -59,43 +59,43 @@ Tras probar varios modelos podemos concluir que lasmejors métricas obtenidas so
     - Eliminamos los que cumplen que son outliers en al menos el 70% de los casos, estos representan un 1.62%.
 
 - **Estandarizacion**:
-    - Estandarizado con robust scaler
+    - Estandarizado con robust scaler.
 
 - **Balanceo**
-    - Obtenemos un balanceo del 62-37 aplicando primero el Tomek link y después el smotenc.
+    - Obtenemos un balanceo del 62-37 aplicando primero Tomek link y después el smotenc.
 
 Una vez llevado a cabo todo este preprocesamiento se probaron varios modelos de clasificación como la regresión logística, el descision tree, el random forst, el gradient boosting y el xgboost. Finalmente las métricas obtenidas fueron las siguientes:
 
 ![Descripción de la imagen](imagenes/metricas-modelo4.png)
 
-Como podemos observar el modelo que mejor funciona es el gradient boosting con un **accuracy, precisión y recal de 0.9** y una **kappa de 0.8**. Además, la métrica que más queremos priorizar es recall pues nos interesa minimizar los falsos negativos, es decir, queremos el menor número de prediciiones que digan que un empleado no se va de la empresa y finalmente se va. Si observamos las matries de confusión para las distintas métricas el gradiente boosting es la que arroja un menor número de falsos negativos.
+Como podemos observar el modelo que mejor funciona es el gradient boosting con un **accuracy, precisión y recall de 0.9** y una **kappa de 0.8**. Además, la métrica que más queremos priorizar es recall pues nos interesa minimizar los falsos negativos, es decir, queremos el menor número de predicciones que digan que un empleado no se va de la empresa y finalmente se va. Si observamos las matrices de confusión para las distintas métricas el gradiente boosting es la que arroja un menor número de falsos negativos.
 
 ![Descripción de la imagen](imagenes/matrices_modelo4.png)
 
-En los distintos modelos se prueban diferentes formas de gestionar los otliers, el encoding, la estandarización o el balanceo, sin embargo, es en este modelo donde mejores métricas se han obtenido.
+En los distintos modelos se han probado diferentes formas de gestionar los outliers, el encoding, la estandarización o el balanceo, sin embargo, es en este modelo donde mejores métricas se han obtenido.
 
-Una vez hemos concluido que el gradient boosting del Modelo4 es el mejor, almacenamos el modelo y lo entrenamos con todos los datos dentro del notebbok `6-modelos.ipynb` en el Módulo4. Además, encontraremos un notebook adicional que es el `7-prediccion.ipynb` donde nos inventamos unos datos ficticios y comprobamos que se hagan las predicciones correctamente.
+Una vez hemos concluido que el gradient boosting del Modelo4 es el mejor, almacenamos el modelo y lo entrenamos con todos los datos dentro del notebook `6-modelos.ipynb` en el Módulo4. Además, encontraremos un notebook adicional que es el `7-prediccion.ipynb` donde nos inventamos unos datos ficticios y comprobamos que se hagan las predicciones correctamente.
 
-Finalmente, para hacer una interfaz más amigable a la hora de hacer las predicciones se ha creado una API con Flask dentro de `src/main.py` la cual renderiza un html a través del cual le podemos meter las distintas métricas para un empleado y predecir con que probabilidad abandona o no la empresa.
+Finalmente, para hacer una interfaz más amigable a la hora de hacer las predicciones se ha creado una API con Flask dentro de `src/main.py` la cual renderiza un html a través del cual le podemos meter las distintas métricas para un empleado y predecir con qué probabilidad abandona o no la empresa.
 
 ## Conclusiones 
 
-Tras obtener nuestro mejor modelo lo que más nos interesa saber es: ¿cuales son los factores que más influyen a la hora de hacer la predicción? ¿Qué valores se toman para cada categoría e las personas que deciden abandonar una empresa?
+Tras obtener nuestro mejor modelo lo que más nos interesa saber es: ¿cuáles son los factores que más influyen a la hora de hacer la predicción? ¿Qué valores se toman para cada categoría en las personas que deciden abandonar una empresa?
 
 La primera pregunta la podemos responder viendo la gráfica de la impotancia de los predictores:
 
 ![Descripción de la imagen](imagenes/feture-importance.png)
 
-Como podemos observar los predictores que mayor peso tienen a la hora de genera el modelo son: YearsAtCompany, YearsWithCurrentManager, Age, NumCompaniesWorked y MaritalStatus. Las primeras no nos sorprenden que parezcan juntas pues como se ve en el EDA las dos primeras estan bastante correlacionadas, sin embargo, Maritalstatus si que me llama la atención. Por otro lado lo que menos parece influir es el JobInvolment, el género y el JobRole.
+Como podemos observar los predictores que mayor peso tienen a la hora de genera el modelo son: YearsAtCompany, YearsWithCurrentManager, Age, NumCompaniesWorked y MaritalStatus. Las primeras no nos sorprenden que parezcan juntas pues como se ve en el EDA las dos primeras están bastante correlacionadas, sin embargo, Maritalstatus si que me llama la atención. Por otro lado lo que menos parece influir es el JobInvolment, el género y el JobRole.
 
 Contestemos a la segunda pregunta, para ello usaremos el gráfico shap:
 
 ![Descripción de la imagen](imagenes/shap.png)
 
-Veamos como los valores de cada variable influye y en que nivel para que una persona abandone la compañía. Para entender los valores de MaritalStatus tenemos que volver al notebook 2 y ver a que valores corresponde cada categría, vemos que Single es la más alta y casado y divorciado tienen valores muy similares. Por lo tanto las personas solteras son más propensas a irse de la compañía.
+Vemos como los valores de cada variable influye y en que nivel para que una persona abandone la compañía. Para entender los valores de MaritalStatus tenemos que volver al notebook 2 y ver a qué valores corresponde cada categría, vemos que Single es la más alta y casado y divorciado tienen valores muy similares. Por lo tanto las personas solteras son más propensas a irse de la compañía.
 También podemos ver que aquellos que llevan menos años en la compañía, con su manager y en general menos años trabajando también son más propensos a irse, lo que coincide con las personas más jovenes. También podemos destacar que aquellas que tienen mayor nivel de estudios o las que tienden a viajar más suelen tener un porcentaje más alto para irse de la empresa. 
 
-Por lo tanto, hemos visto cuales son las que más afectan y también dentro de categoría para que valores suele haber más porcentaje de abandono. también hemos podio observar que métricas que en un primer momento no podían parecer decisorias como EnvironmentSatisfaction o Jobsatisfaction resulta que aquellos trabajadores que les dan valores más altos tiene mayor probabilidades de irse. Por lo que estos gráficos aportan una información de gran valor a la empresa a la hora de identificar en qué clase de perfiles incidir más para cambiar esas tendencias de abandono.
+Por lo tanto, hemos visto cuales son las que más afectan y también dentro de cada categoría para qué valores suele haber más porcentaje de abandono. También hemos podido observar que métricas que en un primer momento no podían parecer decisorias como EnvironmentSatisfaction o Jobsatisfaction resulta que aquellos trabajadores que les dan valores más altos tiene mayor probabilidades de irse. Por lo que estos gráficos aportan una información de gran valor a la empresa a la hora de identificar en qué clase de perfiles incidir más para cambiar esas tendencias de abandono.
 
 
 ## Instalación y Requisitos
